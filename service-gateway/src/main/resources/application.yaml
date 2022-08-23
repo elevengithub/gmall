@@ -1,0 +1,28 @@
+server:
+  port: 80
+
+spring:
+  zipkin:
+    base-url: http://192.168.6.100:9411
+    sender:
+      type: web
+
+# 配置解决全局跨域访问问题
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: # 允许所有的请求路径
+              - "*"
+            allowedMethods: # 允许所有的请求方法
+              - "*"
+            allowedHeaders: "*" # 允许所有类型的请求头
+            allowCredentials: true # 允许携带验证信息 例如：cookie
+
+# 配置路由分发各个微服务的请求
+      routes:
+        - id: product_route
+          uri: lb://service-product # 以 /admin/product 开头的所有请求都lb(loadbalancer)转给service-product
+          predicates:
+            - Path=/admin/product/**
