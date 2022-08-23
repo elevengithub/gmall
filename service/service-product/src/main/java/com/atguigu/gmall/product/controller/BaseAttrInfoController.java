@@ -2,7 +2,10 @@ package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.BaseAttrInfo;
+import com.atguigu.gmall.model.product.BaseAttrValue;
 import com.atguigu.gmall.product.service.BaseAttrInfoService;
+import com.atguigu.gmall.product.service.BaseAttrValueService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,8 @@ public class BaseAttrInfoController {
 
     @Autowired
     BaseAttrInfoService baseAttrInfoService;
+    @Autowired
+    BaseAttrValueService baseAttrValueService;
 
     /**
      *根据一级、二级、三级分离id获取对应的属性信息集合
@@ -44,5 +49,15 @@ public class BaseAttrInfoController {
     public Result saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo){
         baseAttrInfoService.saveOrUpdateAttrInfo(baseAttrInfo);
         return Result.ok();
+    }
+
+    /**
+     * 修改属性之前的数据回显  /admin/product
+     */
+    @GetMapping("/getAttrValueList/{attrId}")
+    public Result getAttrValueList(@PathVariable("attrId") Long attrId){
+        List<BaseAttrValue> list = baseAttrValueService.list(new LambdaQueryWrapper<BaseAttrValue>()
+                .eq(BaseAttrValue::getAttrId, attrId));
+        return Result.ok(list);
     }
 }
