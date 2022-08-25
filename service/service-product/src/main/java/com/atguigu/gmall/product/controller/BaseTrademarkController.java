@@ -73,4 +73,12 @@ public class BaseTrademarkController {
         baseTrademarkService.removeById(id);
         return Result.ok();
     }
+
+    /**
+     * 获取品牌集合
+     */
+    @GetMapping("/baseTrademark/getTrademarkList")
+    public Result getTrademarkList(){
+        return Result.ok(baseTrademarkService.list());
+    }
 }

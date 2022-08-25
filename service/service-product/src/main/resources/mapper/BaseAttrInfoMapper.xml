@@ -15,7 +15,17 @@
         id,attr_name,category_id,
         category_level
     </sql>
+    <!--     数据库查出的每一条记录，new BaseAttrInfo()。然后把数据放到这个对象中。把这个集合返回-->
 
+    <!--  id=1  new BaseAttrInfo(1,价格,61,3,
+            剩下的封装到 attrValueList 集合
+                [new BaseAttrValue(1,0-499,1)]
+                [new BaseAttrValue(2,500-999,1)]);
+          1、mybatis 能区分出 id（id不同就能代表要不要new对象封装数据）
+    -->
+    <!--自定义结果集-->
+    <!--用id标签区分出唯一id-->
+    <!--autoMapping: 数据库的列和JavaBean属性一一对应符合驼峰命名规则-->
     <resultMap id="AttrInfoAndValue"
                autoMapping="true"
                type="com.atguigu.gmall.model.product.BaseAttrInfo">
