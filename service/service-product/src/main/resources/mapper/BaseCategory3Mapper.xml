@@ -13,4 +13,13 @@
     <sql id="Base_Column_List">
         id,name,category2_id
     </sql>
+    <select id="getCategoryView" resultType="com.atguigu.gmall.model.to.CategoryView">
+        select t1.id category3_id, t1.name category3_name,
+        t2.id category2_id, t2.name category2_name,
+        t3.id category1_id, t3.name category1_name
+        from base_category3 t1
+        left join base_category2 t2 on t1.category2_id = t2.id
+        left join base_category1 t3 on t2.category1_id = t3.id
+        where t1.id = #{category3Id}
+    </select>
 </mapper>

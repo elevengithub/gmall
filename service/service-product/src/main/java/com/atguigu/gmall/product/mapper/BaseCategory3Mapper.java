@@ -1,7 +1,9 @@
 package com.atguigu.gmall.product.mapper;
 
 import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.to.CategoryView;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author 14613
@@ -11,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface BaseCategory3Mapper extends BaseMapper<BaseCategory3> {
 
+    CategoryView getCategoryView(@Param("category3Id") Long category3Id);
 }
 
 

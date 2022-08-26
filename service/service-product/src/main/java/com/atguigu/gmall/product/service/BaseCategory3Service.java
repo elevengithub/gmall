@@ -1,6 +1,7 @@
 package com.atguigu.gmall.product.service;
 
 import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.to.CategoryView;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,4 +14,6 @@ import java.util.List;
 public interface BaseCategory3Service extends IService<BaseCategory3> {
 
     List<BaseCategory3> getCategory3s(Long c2Id);
+
+    CategoryView getCategoryView(Long category3Id);
 }

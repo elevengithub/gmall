@@ -2,6 +2,9 @@ package com.atguigu.gmall.product.mapper;
 
 import com.atguigu.gmall.model.product.SkuImage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 14613
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SkuImageMapper extends BaseMapper<SkuImage> {
 
+    List<SkuImage> getSkuImageList(@Param("skuId") Long skuId);
 }
 
 

@@ -31,4 +31,27 @@
         on (ssa.spu_id = ssav.spu_id and ssa.base_sale_attr_id = ssav.base_sale_attr_id)
         where ssa.spu_id=30
     </select>
+
+
+    <resultMap id="SpuSaleAttrListRM" type="com.atguigu.gmall.model.product.SpuSaleAttr">
+        <id column="id" property="id"/>
+        <result column="sale_attr_name" property="saleAttrName"/>
+        <collection property="spuSaleAttrValueList"
+                    ofType="com.atguigu.gmall.model.product.SpuSaleAttrValue">
+            <id column="t2_id" property="id"/>
+            <result column="sale_attr_value_name" property="saleAttrValueName"/>
+            <result column="is_checked" property="isChecked"/>
+        </collection>
+    </resultMap>
+    <select id="getSpuSaleAttrList" resultMap="SpuSaleAttrListRM">
+        select t1.id,t1.sale_attr_name,
+        t2.id t2_id,t2.sale_attr_value_name,
+        if(t3.sale_attr_value_id is null , 0, 1) as is_checked
+        from spu_sale_attr t1
+        left join spu_sale_attr_value t2 on t1.spu_id = t2.spu_id
+        and t1.base_sale_attr_id = t2.base_sale_attr_id
+        left join sku_sale_attr_value t3 on t2.id = t3.sale_attr_value_id and t3.sku_id = #{skuId}
+        where t1.spu_id = #{spuId}
+        order by t1.id, t2.id
+    </select>
 </mapper>
