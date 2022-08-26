@@ -1,0 +1,61 @@
+{
+  "id": null,
+  "spuId": 30,
+  "price": "8799",
+  "skuName": "Apple iPhone 13 Pro (A2639) 256GB 远峰蓝色 支持移动联通电信5G 双卡双待手机",
+  "weight": "0.37",
+  "skuDesc": "主体\n上市日期\n2021-09-15\n机型\nApple iPhone 13 Pro\n入网型号\nA2639\n基本信息\n机身尺寸\n宽71.5mm；长146.7mm；厚7.65mm\n机身重量\n203g\n机身颜色\n远峰蓝色",
+  "category3Id": 61,
+  "skuAttrValueList": [
+    {
+      "attrId": "1",
+      "valueId": "6"
+    },
+    {
+      "attrId": "2",
+      "valueId": "8"
+    },
+    {
+      "attrId": "3",
+      "valueId": "17"
+    },
+    {
+      "attrId": "4",
+      "valueId": "25"
+    },
+    {
+      "attrId": "5",
+      "valueId": "34"
+    }
+  ],
+  "skuSaleAttrValueList": [
+    {
+      "saleAttrValueId": "124",
+      "saleAttrValueName": "银色",
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色"
+    },
+    {
+      "saleAttrValueId": "126",
+      "saleAttrValueName": "6G+128G",
+      "baseSaleAttrId": "2",
+      "saleAttrName": "选择版本"
+    }
+  ],
+  "skuImageList": [
+    {
+      "spuImgId": 279,
+      "imgName": "2.png",
+      "imgUrl": "http://192.168.6.100:9000/gmall/2022-08-25/5958de44b23d47339389f635ddb634402.png",
+      "isDefault": 1
+    },
+    {
+      "spuImgId": 280,
+      "imgName": "3.png",
+      "imgUrl": "http://192.168.6.100:9000/gmall/2022-08-25/ceaaee17630f41fabf7a6f4bb8a309e03.png",
+      "isDefault": 0
+    }
+  ],
+  "skuDefaultImg": "http://192.168.6.100:9000/gmall/2022-08-25/5958de44b23d47339389f635ddb634402.png",
+  "tmId": 12
+}

@@ -1,3 +1,5 @@
 #说明哪些提交哪些忽略
 **/target/**
 .idea
+**/static/**
+**/templates/**
