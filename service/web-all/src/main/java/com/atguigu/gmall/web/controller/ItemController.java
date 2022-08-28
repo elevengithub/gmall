@@ -29,6 +29,7 @@ public class ItemController {
         model.addAttribute("skuInfo",skuDetailTo.getSkuInfo());
         model.addAttribute("price",skuDetailTo.getPrice());
         model.addAttribute("spuSaleAttrList",skuDetailTo.getSpuSaleAttrList());
+        model.addAttribute("valuesSkuJson",skuDetailTo.getValuesSkuJson());
         return "item/index";
     }
 }

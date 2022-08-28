@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface SkuDetailFeignClient {
 
     @GetMapping("/api/inner/rpc/item/getSkuDetailTo/{skuId}")
-    public Result<SkuDetailTo> getSkuDetailTo(@PathVariable("skuId") Long skuId);
+    Result<SkuDetailTo> getSkuDetailTo(@PathVariable("skuId") Long skuId);
 }

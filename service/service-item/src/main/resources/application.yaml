@@ -8,3 +8,10 @@ spring:
       type: web
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+app:
+  threadpool:
+    core-pool-size: 2
+    maximum-pool-size: 4
+    keep-alive-time: 600
+    queue-size: 2000

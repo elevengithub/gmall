@@ -1,10 +1,18 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.common.util.Jsons;
+import com.atguigu.gmall.model.to.ValuesSkuJsonTo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.model.product.SkuSaleAttrValue;
 import com.atguigu.gmall.product.service.SkuSaleAttrValueService;
 import com.atguigu.gmall.product.mapper.SkuSaleAttrValueMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 14613
@@ -15,6 +23,24 @@ import org.springframework.stereotype.Service;
 public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMapper, SkuSaleAttrValue>
     implements SkuSaleAttrValueService{
 
+    @Resource
+    SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+
+    @Override
+    public String getValuesSkuJsonTo(Long spuId) {
+        List<ValuesSkuJsonTo> list = skuSaleAttrValueMapper.getValuesSkuJsonTo(spuId);
+        Map<String,Long> map = new HashMap<>();
+        list.forEach(v -> {
+            map.put(v.getValueJson(),v.getSkuId());
+        });
+        String s = null;
+        try {
+            s = Jsons.object2String(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
 }
 
 

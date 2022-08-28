@@ -2,6 +2,7 @@ package com.atguigu.gmall.product.service;
 
 import com.atguigu.gmall.model.product.SkuSaleAttrValue;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
 * @author 14613
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SkuSaleAttrValueService extends IService<SkuSaleAttrValue> {
 
+    String getValuesSkuJsonTo(Long spuId);
 }

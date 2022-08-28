@@ -3,9 +3,11 @@ package com.atguigu.gmall.product.service.impl;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryView;
 import com.atguigu.gmall.model.to.SkuDetailTo;
+import com.atguigu.gmall.model.to.ValuesSkuJsonTo;
 import com.atguigu.gmall.product.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.product.mapper.SkuInfoMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -73,26 +75,98 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         skuInfoMapper.updateIsSale(id,1);
     }
 
+    /**
+     * 根据skuId获取skuInfo商品信息
+     * @param skuId
+     * @return
+     */
     @Override
-    public SkuDetailTo getSkuDetailTo(Long skuId) {
+    public SkuInfo getSkuInfo(Long skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        return skuInfo;
+    }
+
+    /**
+     * 根据skuId获取对应的skuImageList
+     * @param skuId
+     * @return
+     */
+    @Override
+    public List<SkuImage> getSkuImageList(Long skuId) {
+        List<SkuImage> imageList = skuImageService.getSkuImageList(skuId);
+        return imageList;
+    }
+
+    /**
+     * 根据skuId获取实时价格
+     * @param skuId
+     * @return
+     */
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+        BigDecimal price = skuInfoMapper.get1010Price(skuId);
+        return price;
+    }
+
+    /**
+     * 根据category3Id获取商品对应的CategoryView三级分类信息
+     * @param c3Id
+     * @return
+     */
+    @Override
+    public CategoryView getCategoryView(Long c3Id) {
+        CategoryView categoryView = baseCategory3Service.getCategoryView(c3Id);
+        return categoryView;
+    }
+
+    /**
+     * 获取该商品对应的所有销售属性名和值的spuSaleAttrList信息，并高亮显示已选择sku商品
+     * @param skuId
+     * @param spuId
+     * @return
+     */
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrList(Long skuId, Long spuId) {
+        List<SpuSaleAttr> list = spuSaleAttrService.getSpuSaleAttrList(skuId,spuId);
+        return list;
+    }
+
+    /**
+     *根据spuId获取sku商品对应的所有兄弟商品信息
+     * @param spuId
+     * @return
+     */
+    @Override
+    public String getValuesSkuJsonTo(Long spuId) {
+        String json = skuSaleAttrValueService.getValuesSkuJsonTo(spuId);
+        return json;
+    }
+
+
+    /*@Override
+    public SkuDetailTo getSkuDetailTo(Long skuId){
         SkuDetailTo skuDetailTo = new SkuDetailTo();
         //1、根据skuId获取skuInfo对象
         SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
-        //获取sku对应的skuImageList
+        //2、获取sku对应的skuImageList
         List<SkuImage> imageList = skuImageService.getSkuImageList(skuId);
         skuInfo.setSkuImageList(imageList);
         skuDetailTo.setSkuInfo(skuInfo);
-        //2、获取商品的实时价格，设置到SkuDetailTo的price属性
+        //3、获取商品的实时价格，设置到SkuDetailTo的price属性
         BigDecimal price = skuInfoMapper.get1010Price(skuId);
         skuDetailTo.setPrice(price);
-        //3、获取SkuDetailTo中的categoryView，根据category3_id
+        //4、获取SkuDetailTo中的categoryView，根据category3_id
         CategoryView categoryView = baseCategory3Service.getCategoryView(skuInfo.getCategory3Id());
         skuDetailTo.setCategoryView(categoryView);
-        //4、获取该商品对应的所有销售属性名和值的spuSaleAttrList信息，并高亮显示已选择sku商品
+        //5、获取该商品对应的所有销售属性名和值的spuSaleAttrList信息，并高亮显示已选择sku商品
         List<SpuSaleAttr> list = spuSaleAttrService.getSpuSaleAttrList(skuId,skuInfo.getSpuId());
         skuDetailTo.setSpuSaleAttrList(list);
+        //6、根据当前skuId获取当前sku对应的所有兄弟商品信息。即：valuesSkuJson。以商品的属性为key，商品id为值的json字符串。
+        //前端代码：JSON.parse() : Json 字符串转换为对象！ {"115|117":"44","114|117":"45"}
+        String json = skuSaleAttrValueService.getValuesSkuJsonTo(skuInfo.getSpuId());
+        skuDetailTo.setValuesSkuJson(json);
         return skuDetailTo;
-    }
+    }*/
 }
 
 
