@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.common.constant.SysRedisConst;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryView;
 import com.atguigu.gmall.model.to.SkuDetailTo;
@@ -8,6 +9,8 @@ import com.atguigu.gmall.product.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.product.mapper.SkuInfoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.redisson.api.RBloomFilter;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +38,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     BaseCategory3Service baseCategory3Service;
     @Resource
     SpuSaleAttrService spuSaleAttrService;
+    @Resource
+    RedissonClient redissonClient;
 
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
@@ -62,6 +67,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         });
         //4.2、批量保存
         skuSaleAttrValueService.saveBatch(skuSaleAttrValueList);
+        //5、将skuId保存至布隆过滤器中
+        RBloomFilter<Object> filter = redissonClient.getBloomFilter(SysRedisConst.BLOOM_SKUID);
+        filter.add(skuId);
     }
 
     @Override
@@ -140,6 +148,16 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     public String getValuesSkuJsonTo(Long spuId) {
         String json = skuSaleAttrValueService.getValuesSkuJsonTo(spuId);
         return json;
+    }
+
+    /**
+     * 获取所有商品id
+     * @return
+     */
+    @Override
+    public List<Long> getSkuIdList() {
+        List<Long> ids = skuInfoMapper.getSkuIdList();
+        return ids;
     }
 
 

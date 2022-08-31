@@ -33,13 +33,7 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
         list.forEach(v -> {
             map.put(v.getValueJson(),v.getSkuId());
         });
-        String s = null;
-        try {
-            s = Jsons.object2String(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return s;
+        return Jsons.toStr(map);
     }
 }
 

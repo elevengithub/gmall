@@ -2,6 +2,7 @@ package com.atguigu.gmall.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.StringUtils;
 
 public class Jsons {
 
@@ -11,8 +12,28 @@ public class Jsons {
      * @return
      * @throws JsonProcessingException
      */
-    public static String object2String(Object obj) throws JsonProcessingException {
+    public static String toStr(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(obj);
+        String s = null;
+        try {
+            s = mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public static<T> T toObj(String str,Class<T> clazz) {
+        ObjectMapper mapper = new ObjectMapper();
+        if (StringUtils.isEmpty(str)) {
+            return null;
+        }
+        T t = null;
+        try {
+            t = mapper.readValue(str, clazz);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return t;
     }
 }

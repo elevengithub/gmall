@@ -24,12 +24,18 @@ public class ItemController {
     @GetMapping("/{skuId}.html")
     public String getSkuDetailTo(@PathVariable("skuId") Long skuId, Model model){
         Result<SkuDetailTo> result = skuDetailFeignClient.getSkuDetailTo(skuId);
-        SkuDetailTo skuDetailTo = result.getData();
-        model.addAttribute("categoryView",skuDetailTo.getCategoryView());
-        model.addAttribute("skuInfo",skuDetailTo.getSkuInfo());
-        model.addAttribute("price",skuDetailTo.getPrice());
-        model.addAttribute("spuSaleAttrList",skuDetailTo.getSpuSaleAttrList());
-        model.addAttribute("valuesSkuJson",skuDetailTo.getValuesSkuJson());
+
+        if (result.isOk()) {
+            SkuDetailTo skuDetailTo = result.getData();
+            if (skuDetailTo == null || skuDetailTo.getSkuInfo() == null) {
+                return "item/404";
+            }
+            model.addAttribute("categoryView",skuDetailTo.getCategoryView());
+            model.addAttribute("skuInfo",skuDetailTo.getSkuInfo());
+            model.addAttribute("price",skuDetailTo.getPrice());
+            model.addAttribute("spuSaleAttrList",skuDetailTo.getSpuSaleAttrList());
+            model.addAttribute("valuesSkuJson",skuDetailTo.getValuesSkuJson());
+        }
         return "item/index";
     }
 }

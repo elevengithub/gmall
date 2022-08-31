@@ -69,4 +69,10 @@ public interface SkuInfoService extends IService<SkuInfo> {
      * @return
      */
     String getValuesSkuJsonTo(Long spuId);
+
+    /**
+     * 获取所有skuId
+     * @return
+     */
+    List<Long> getSkuIdList();
 }

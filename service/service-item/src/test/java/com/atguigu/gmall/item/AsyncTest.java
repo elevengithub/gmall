@@ -20,8 +20,7 @@ public class AsyncTest {
                 runAsync(Runnable r,Executor e)使用自定义线程池
         */
 //        CompletableFuture<Void> future = CompletableFuture.runAsync(() ->
-//                System.out.println(Thread.currentThread().getName() + " : Hello CompletableFuture!"),
-//                executor);
+//                System.out.println(Thread.currentThread().getName() + " : Hello CompletableFuture!"),executor);
         /*supplyAsync(): CompletableFuture<String> 有返回值
                 supplyAsync(Supply s)使用默认线程池ForkJoinPool
                 supplyAsync(Supply s,Executor e)使用自定义线程池
@@ -38,9 +37,9 @@ public class AsyncTest {
         thenAcceptAsync(Consumer c,Executor e): 异步使用自定义线程池
          */
 
-//        CompletableFuture<Void> accept = future.thenAcceptAsync(s -> {
+//        CompletableFuture<Void> accept = future.thenAccept(s -> {
 //            System.out.println(Thread.currentThread().getName() + "拿到上一步执行结果");
-//        },executor);
+//        });
 
         /*
         thenRun(): 不使用上一步得到的结果，等上一步执行完再执行本次任务。
@@ -59,9 +58,13 @@ public class AsyncTest {
         thenApplyAsync(Function fn,Executor e): 使用自定义线程池
          */
         CompletableFuture<String> thenApply = future.thenApplyAsync(s -> {
-            return Thread.currentThread().getName() + "执行第二步任务";
+            return Thread.currentThread().getName() + "获取到第一步执行结果，执行第二步任务";
         },executor);
         System.out.println(thenApply.get());
+
+        CompletableFuture.allOf(future, thenApply).join();
+        System.out.println("异步任务全部执行完毕");
+
         Thread.sleep(10000);
 
     }
