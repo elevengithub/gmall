@@ -5,6 +5,8 @@ import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.to.CategoryTreeTo;
 import com.atguigu.gmall.product.service.BaseCategory2Service;
 import com.atguigu.gmall.product.mapper.BaseCategory2Mapper;
+import com.atguigu.starter.cache.annotation.GmallCache;
+import com.atguigu.starter.cache.constant.SysRedisConst;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ public class BaseCategory2ServiceImpl
         return category2s;
     }
 
+    @GmallCache(cacheKey = SysRedisConst.CACHE_CATEGORYS)
     @Override
     public List<CategoryTreeTo> getCategoryTree() {
         return baseCategory2Mapper.getCategoryTree();

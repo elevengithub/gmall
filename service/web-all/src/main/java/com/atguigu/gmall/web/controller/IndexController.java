@@ -23,5 +23,4 @@ public class IndexController {
         model.addAttribute("list",result.getData());
         return "index/index";
     }
-
 }

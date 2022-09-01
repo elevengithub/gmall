@@ -11,6 +11,7 @@ import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.model.to.CategoryView;
 import com.atguigu.gmall.model.to.SkuDetailTo;
+import com.atguigu.starter.cache.annotation.GmallCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,24 @@ public class SkuDetailServiceImpl implements SkuDetailService {
      * @param skuId
      * @return
      */
+    @GmallCache(
+            cacheKey = SysRedisConst.CACHE_SKU_PREFIX + "#{#params[0]}",
+            bloomName = SysRedisConst.BLOOM_SKUID,
+            bloomValue = "#{#params[0]}",
+            lockName = SysRedisConst.LOCK_SKU_DETAIL + "#{#params[0]}"
+    )
     @Override
     public SkuDetailTo getSkuDetailTo(Long skuId) {
+        SkuDetailTo skuDetailTo = getDetailToMethod2(skuId);
+        return skuDetailTo;
+    }
+
+    /**
+     * 使用Redisson、分布式锁、布隆过滤器解决缓存三大问题
+     * @param skuId
+     * @return
+     */
+    private SkuDetailTo getDetailToMethod3(Long skuId) {
         //使用分布式缓存
         //1、查询缓存
         String cacheKey = SysRedisConst.CACHE_SKU_PREFIX + skuId;
@@ -99,6 +116,11 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         }
     }
 
+    /**
+     * 使用异步编排根据skuId获取sku商品详情
+     * @param skuId
+     * @return
+     */
     private SkuDetailTo getDetailToMethod2(Long skuId) {
         SkuDetailTo skuDetailTo = new SkuDetailTo();
         //1、获取skuInfo信息添加到skuDetailTo中
