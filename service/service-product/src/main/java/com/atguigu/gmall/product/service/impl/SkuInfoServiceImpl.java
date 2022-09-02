@@ -1,14 +1,12 @@
 package com.atguigu.gmall.product.service.impl;
 
-import com.atguigu.gmall.common.constant.SysRedisConst;
+
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.model.to.CategoryView;
-import com.atguigu.gmall.model.to.SkuDetailTo;
-import com.atguigu.gmall.model.to.ValuesSkuJsonTo;
 import com.atguigu.gmall.product.service.*;
+import com.atguigu.starter.cache.constant.SysRedisConst;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.product.mapper.SkuInfoMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;

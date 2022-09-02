@@ -17,7 +17,7 @@ public class IndexController {
      * 跳到首页。获取三级分类信息，首页详情展示
      * @return
      */
-    @GetMapping("{/,/index}")
+    @GetMapping({"/","/index"})
     public String getCategoryTree(Model model){
         Result result = categoryFeignClient.getCategoryTree();
         model.addAttribute("list",result.getData());
