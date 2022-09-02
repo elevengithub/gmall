@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
 @EnableThreadPool
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.atguigu.gmall.feign.product")
 @SpringCloudApplication
 public class ItemMainApplication {
     public static void main(String[] args) {

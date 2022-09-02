@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>service</artifactId>
+        <artifactId>common</artifactId>
         <groupId>com.atguigu.gmall</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service-item</artifactId>
+    <artifactId>feign-client</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,23 +18,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
-        </dependency>
-        <dependency>
             <groupId>com.atguigu.gmall</groupId>
-            <artifactId>mall-cache-starter</artifactId>
+            <artifactId>model</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.atguigu.gmall</groupId>
-            <artifactId>feign-client</artifactId>
+            <artifactId>common-util</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

@@ -2,16 +2,8 @@ server:
   port: 7200
 
 spring:
-  zipkin:
-    base-url: http://192.168.6.100:9411
-    sender:
-      type: web
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-  redis:
-    host: 192.168.6.100
-    port: 6379
-    password: abc123456
 
 app:
   threadpool:

@@ -1,11 +1,11 @@
-package com.atguigu.gmall.item.feign;
+package com.atguigu.gmall.feign.product;
 
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
+import com.atguigu.gmall.model.to.CategoryTreeTo;
 import com.atguigu.gmall.model.to.CategoryView;
-import com.atguigu.gmall.model.to.SkuDetailTo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @FeignClient("service-product")
-public interface SkuDetailFeignClient {
+public interface SkuProductFeignClient {
 
 //    @GetMapping("/api/inner/rpc/product/getSkuDetailTo/{skuId}")
 //    Result<SkuDetailTo> getSkuDetailTo(@PathVariable("skuId") Long skuId);
@@ -68,4 +68,11 @@ public interface SkuDetailFeignClient {
      */
     @GetMapping("/api/inner/rpc/product/getValuesSkuJsonTo/{spuId}")
     public Result<String> getValuesSkuJsonTo(@PathVariable("spuId") Long spuId);
+
+    /**
+     * 获取三级分类信息
+     * @return
+     */
+    @GetMapping("/api/inner/rpc/product/getCategoryTree")
+    Result<List<CategoryTreeTo>> getCategoryTree();
 }

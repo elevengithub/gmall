@@ -1,6 +1,6 @@
 package com.atguigu.gmall.item.controller;
 
-import com.atguigu.gmall.common.config.threadpool.AppThreadPoolAutoConfiguration;
+
 import com.atguigu.gmall.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
