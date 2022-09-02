@@ -2,20 +2,12 @@ server:
   port: 7000
 spring:
   profiles:
-    active: shardingsphere
+    include: sharding
   datasource:
     url: jdbc:mysql://192.168.6.100:3306/gmall_product?useSSL=false&characterEncoding=utf-8
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-  zipkin:
-    base-url: http://192.168.6.100:9411
-    sender:
-      type: web
-  redis:
-    host: 192.168.6.100
-    port: 6379
-    password: abc123456
 
 # 自定义配置信息
 app:
