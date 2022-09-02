@@ -68,4 +68,18 @@ public interface CacheOpsService {
      * @return
      */
     void unLock(String lockName);
+
+    /**
+     * 缓存数据
+     * @param cacheKey   缓存key
+     * @param cacheData  数据
+     * @param ttl    过期时间
+     */
+    void saveData(String cacheKey,Object cacheData,Long ttl);
+
+    /**
+     * 延迟双删
+     * @param cacheKey  缓存key
+     */
+    void delay2Delete(String cacheKey);
 }

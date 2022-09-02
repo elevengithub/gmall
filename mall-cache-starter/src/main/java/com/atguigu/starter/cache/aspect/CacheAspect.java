@@ -83,8 +83,9 @@ public class CacheAspect {
                 //5、加锁成功，回源
                 if (isLocked) {
                     cacheData = joinPoint.proceed(joinPoint.getArgs());
+                    long ttl = determinTtl(joinPoint);
                     //将数据放入缓存
-                    cacheOpsService.saveData(cacheKey,cacheData);
+                    cacheOpsService.saveData(cacheKey,cacheData,ttl);
                     //返回数据
                     return cacheData;
                 } else {
@@ -98,6 +99,23 @@ public class CacheAspect {
         }
         //3、缓存命中，直接返回
         return cacheData;
+    }
+
+    /**
+     * 获取过期时间
+     * @param joinPoint
+     * @return
+     */
+    private long determinTtl(ProceedingJoinPoint joinPoint) {
+        //1、获取目标方法的签名
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        //2、获取目标方法
+        Method method = signature.getMethod();
+        //3、获取目标方法上的注解
+        GmallCache annotation = method.getAnnotation(GmallCache.class);
+        //4、获取注解属性ttl对应的值
+        long ttl = annotation.ttl();
+        return ttl;
     }
 
     /**

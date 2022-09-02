@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -20,6 +21,9 @@ public class CacheOpsServiceImpl implements CacheOpsService {
     StringRedisTemplate redisTemplate;
     @Autowired
     RedissonClient redissonClient;
+
+    //执行延迟任务线程池
+    ScheduledThreadPoolExecutor scheduledThreadPool = new ScheduledThreadPoolExecutor(4);
 
     /**
      * 查询缓存
@@ -147,6 +151,37 @@ public class CacheOpsServiceImpl implements CacheOpsService {
     public void unLock(String lockName) {
         RLock lock = redissonClient.getLock(lockName);
         lock.unlock();
+    }
+
+    /**
+     * 缓存数据
+     * @param cacheKey   缓存key
+     * @param cacheData  数据
+     * @param ttl    过期时间
+     */
+    @Override
+    public void saveData(String cacheKey, Object cacheData, Long ttl) {
+        if (cacheData == null) {
+            redisTemplate.opsForValue().set(cacheKey,
+                    SysRedisConst.NULL_VAL,
+                    SysRedisConst.NULL_VAL_CACHETIME,
+                    TimeUnit.SECONDS);
+        }
+        String str = Jsons.toStr(cacheData);
+        redisTemplate.opsForValue().set(cacheKey,str,ttl,TimeUnit.SECONDS);
+    }
+
+    /**
+     * 延迟双删
+     * @param cacheKey  缓存key
+     */
+    @Override
+    public void delay2Delete(String cacheKey) {
+       redisTemplate.delete(cacheKey);
+       //创建一个专门执行延迟队列的线程池
+        scheduledThreadPool.schedule(() -> redisTemplate.delete(cacheKey),
+                5,
+                TimeUnit.SECONDS);
     }
 
 }
