@@ -1,0 +1,10 @@
+server:
+  port: 7300
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+  elasticsearch:
+    rest:
+      uris: 192.168.6.100:9200
