@@ -2,6 +2,7 @@ package com.atguigu.gmall.item.service.impl;
 
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.feign.product.SkuProductFeignClient;
+import com.atguigu.gmall.feign.search.SearchFeignClient;
 import com.atguigu.gmall.item.cache.CacheOpsService;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.SkuImage;
@@ -33,6 +34,8 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     StringRedisTemplate redisTemplate;
     @Autowired
     CacheOpsService cacheOpsService;
+    @Autowired
+    SearchFeignClient searchFeignClient;
 
     private Map<String,SkuDetailTo> cacheData = new ConcurrentHashMap<>();
 
@@ -52,6 +55,20 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     public SkuDetailTo getSkuDetailTo(Long skuId) {
         SkuDetailTo skuDetailTo = getDetailToMethod2(skuId);
         return skuDetailTo;
+    }
+
+    /**
+     * 更新商品热度分
+     * @param skuId  商品id
+     */
+    @Override
+    public void updateHotScore(Long skuId) {
+        Long hotScore = redisTemplate
+                .opsForValue()
+                .increment(SysRedisConst.SKU_HOTSCORE_PREFIX + skuId);
+        if (hotScore % 100 == 0) {
+            searchFeignClient.updateHotScore(skuId,hotScore);
+        }
     }
 
     /**

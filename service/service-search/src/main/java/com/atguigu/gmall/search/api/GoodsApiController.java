@@ -47,4 +47,18 @@ public class GoodsApiController {
         SearchResponseVo responseVo = goodsService.search(searchParam);
         return Result.ok(responseVo);
     }
+
+    /**
+     * 更新商品热度分
+     * @param skuId
+     * @param hotScore
+     * @return
+     */
+    @GetMapping("/goods/hotscore/{skuId}")
+    public Result updateHotScore(@PathVariable("skuId") Long skuId,
+                                 @RequestParam("hotScore") Long hotScore){
+        goodsService.updateHotScore(skuId,hotScore);
+        return Result.ok();
+    }
+
 }

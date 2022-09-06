@@ -1,0 +1,1416 @@
+品牌聚合分析
+GET /goods/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match_all": {}
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "tmIdAgg": {
+      "terms": {
+        "field": "tmId",
+        "size": 1000
+      },
+      "aggs": {
+        "tmNameAgg": {
+          "terms": {
+            "field": "tmName",
+            "size": 1
+          }
+        },
+        "tmLogoUrlAg": {
+          "terms": {
+            "field": "tmLogoUrl",
+            "size": 1
+          }
+        }
+      }
+    }
+  }
+}
+属性聚合分析
+GET /goods/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match_all": {}
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "attrsAgg": {
+      "nested": {
+        "path": "attrs"
+      },
+      "aggs": {
+        "attrIdAgg": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 100
+          },
+          "aggs": {
+            "attrNameAgg": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 100
+              }
+            },
+            "attrValueAgg": {
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 100
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+品牌聚合查询结果
+{
+  "took" : 5,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 11,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "41",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 41,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051685202b22930ae8ce248e39cce327fcb09d008.png",
+          "title" : "荣耀V30 V30Pro 5G手机 华为麒麟990芯片 V30pro 幻夜星河 全网通（8+256G）",
+          "price" : 4499.0,
+          "createTime" : "2022-09-04 14:21:40",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "256GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "42",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 42,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250259ddd7c89704bd19db874fa7906ce0e.png",
+          "title" : "小米 CC9 手机 美颜自拍 游戏手机 蓝色（深蓝星球） 全网通 6GB+128GB",
+          "price" : 1943.0,
+          "createTime" : "2022-09-04 14:21:41",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.75-6.84英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "其它",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "43",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 43,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16230513636548bd01a398e614d2bab5fd3366883b1b7.png",
+          "title" : "小米 CC9 手机 美颜自拍 游戏手机 仙女渐变色（美图定制版） 全网通 6GB+128GB",
+          "price" : 2200.0,
+          "createTime" : "2022-09-04 14:21:42",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.45-6.54英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "其它",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "44",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 44,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16230513636548bd01a398e614d2bab5fd3366883b1b7.png",
+          "title" : "小米 CC9 PLUS 手机 美颜自拍 游戏手机 仙女渐变色(美图定制版) 4G全网通 6GB+128GB",
+          "price" : 2200.0,
+          "createTime" : "2022-09-04 14:21:43",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.65-6.74英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙730",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "40",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 40,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16210460331111.png",
+          "title" : "荣耀V30 V30Pro 5G手机 华为麒麟990芯片 V30pro 冰岛幻境 全网通（8+256G）",
+          "price" : 4399.0,
+          "createTime" : "2022-09-04 14:21:39",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "256GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "47",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 47,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051685202b22930ae8ce248e39cce327fcb09d008.png",
+          "title" : "荣耀V30 PRO PLUS 5G双模 麒麟990 5GSOC芯片 双快充 游戏手机 幻夜星河 全网通(8GB 128GB)",
+          "price" : 4999.0,
+          "createTime" : "2022-09-04 14:21:45",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.75-6.84英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "48",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 48,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250b8c95c2eb87142ee96935f500f848867.png",
+          "title" : "小米CC9 多功能NFC全网通4G手机 深蓝星球（蓝色） 6+64G",
+          "price" : 1488.0,
+          "createTime" : "2022-09-04 14:21:45",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1000-1699",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.55-6.64英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "64GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "49",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 49,
+          "defaultImg" : "http://192.168.6.100:9000/gmall/2022-08-25/5958de44b23d47339389f635ddb634402.png",
+          "title" : "Apple iPhone 13 Pro (A2639) 256GB 远峰蓝色 支持移动联通电信5G 双卡双待手机",
+          "price" : 8799.0,
+          "createTime" : "2022-09-04 14:21:46",
+          "tmId" : 12,
+          "tmName" : "苹果",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/3dec227be3374899a30243b5ecb7ab1bpingguo.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "4500-11999",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "12GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "512GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "50",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 50,
+          "defaultImg" : "http://192.168.6.100:9000/gmall/2022-08-25/ceaaee17630f41fabf7a6f4bb8a309e03.png",
+          "title" : " AppleiPhone 13 Pro Max",
+          "price" : 6999.0,
+          "createTime" : "2022-09-04 14:21:38",
+          "tmId" : 12,
+          "tmName" : "苹果",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/3dec227be3374899a30243b5ecb7ab1bpingguo.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "4500-11999",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "12GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "512GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "45",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 45,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250259ddd7c89704bd19db874fa7906ce0e.png",
+          "title" : "小米 CC9 PLUS 手机 美颜自拍 游戏手机 蓝色(深蓝星球) 4G全网通 6GB+128GB",
+          "price" : 1999.0,
+          "createTime" : "2022-09-04 14:21:43",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.0～6.24英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙845",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "aggregations" : {
+    "tmIdAgg" : {
+      "doc_count_error_upper_bound" : 0,
+      "sum_other_doc_count" : 0,
+      "buckets" : [
+        {
+          "key" : 4,
+          "doc_count" : 5,
+          "tmNameAgg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "小米",
+                "doc_count" : 5
+              }
+            ]
+          },
+          "tmLogoUrlAg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+                "doc_count" : 5
+              }
+            ]
+          }
+        },
+        {
+          "key" : 2,
+          "doc_count" : 4,
+          "tmNameAgg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "华为",
+                "doc_count" : 4
+              }
+            ]
+          },
+          "tmLogoUrlAg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+                "doc_count" : 4
+              }
+            ]
+          }
+        },
+        {
+          "key" : 12,
+          "doc_count" : 2,
+          "tmNameAgg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "苹果",
+                "doc_count" : 2
+              }
+            ]
+          },
+          "tmLogoUrlAg" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "http://192.168.6.100:9000/gmall/2022-08-25/3dec227be3374899a30243b5ecb7ab1bpingguo.png",
+                "doc_count" : 2
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+属性聚合查询结果
+{
+  "took" : 51,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 11,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "41",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 41,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051685202b22930ae8ce248e39cce327fcb09d008.png",
+          "title" : "荣耀V30 V30Pro 5G手机 华为麒麟990芯片 V30pro 幻夜星河 全网通（8+256G）",
+          "price" : 4499.0,
+          "createTime" : "2022-09-04 14:21:40",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "256GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "42",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 42,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250259ddd7c89704bd19db874fa7906ce0e.png",
+          "title" : "小米 CC9 手机 美颜自拍 游戏手机 蓝色（深蓝星球） 全网通 6GB+128GB",
+          "price" : 1943.0,
+          "createTime" : "2022-09-04 14:21:41",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.75-6.84英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "其它",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "43",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 43,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16230513636548bd01a398e614d2bab5fd3366883b1b7.png",
+          "title" : "小米 CC9 手机 美颜自拍 游戏手机 仙女渐变色（美图定制版） 全网通 6GB+128GB",
+          "price" : 2200.0,
+          "createTime" : "2022-09-04 14:21:42",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.45-6.54英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "其它",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "44",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 44,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16230513636548bd01a398e614d2bab5fd3366883b1b7.png",
+          "title" : "小米 CC9 PLUS 手机 美颜自拍 游戏手机 仙女渐变色(美图定制版) 4G全网通 6GB+128GB",
+          "price" : 2200.0,
+          "createTime" : "2022-09-04 14:21:43",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.65-6.74英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙730",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "40",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 40,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/16210460331111.png",
+          "title" : "荣耀V30 V30Pro 5G手机 华为麒麟990芯片 V30pro 冰岛幻境 全网通（8+256G）",
+          "price" : 4399.0,
+          "createTime" : "2022-09-04 14:21:39",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "256GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "47",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 47,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051685202b22930ae8ce248e39cce327fcb09d008.png",
+          "title" : "荣耀V30 PRO PLUS 5G双模 麒麟990 5GSOC芯片 双快充 游戏手机 幻夜星河 全网通(8GB 128GB)",
+          "price" : 4999.0,
+          "createTime" : "2022-09-04 14:21:45",
+          "tmId" : 2,
+          "tmName" : "华为",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/b9a9fc2e22ff4e58b2b5dac6d039911a华为.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "2800-4499",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.75-6.84英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "8GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "麒麟990",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "48",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 48,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250b8c95c2eb87142ee96935f500f848867.png",
+          "title" : "小米CC9 多功能NFC全网通4G手机 深蓝星球（蓝色） 6+64G",
+          "price" : 1488.0,
+          "createTime" : "2022-09-04 14:21:45",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1000-1699",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.55-6.64英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "64GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "49",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 49,
+          "defaultImg" : "http://192.168.6.100:9000/gmall/2022-08-25/5958de44b23d47339389f635ddb634402.png",
+          "title" : "Apple iPhone 13 Pro (A2639) 256GB 远峰蓝色 支持移动联通电信5G 双卡双待手机",
+          "price" : 8799.0,
+          "createTime" : "2022-09-04 14:21:46",
+          "tmId" : 12,
+          "tmName" : "苹果",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/3dec227be3374899a30243b5ecb7ab1bpingguo.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "4500-11999",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "12GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "512GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "50",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 50,
+          "defaultImg" : "http://192.168.6.100:9000/gmall/2022-08-25/ceaaee17630f41fabf7a6f4bb8a309e03.png",
+          "title" : " AppleiPhone 13 Pro Max",
+          "price" : 6999.0,
+          "createTime" : "2022-09-04 14:21:38",
+          "tmId" : 12,
+          "tmName" : "苹果",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/3dec227be3374899a30243b5ecb7ab1bpingguo.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "4500-11999",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : " 6.95英寸及以上",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "12GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "512GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙855",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      },
+      {
+        "_index" : "goods",
+        "_type" : "_doc",
+        "_id" : "45",
+        "_score" : 1.0,
+        "_source" : {
+          "_class" : "com.atguigu.gmall.model.list.Goods",
+          "id" : 45,
+          "defaultImg" : "http://39.99.159.121:9000/gmall/1623051371250259ddd7c89704bd19db874fa7906ce0e.png",
+          "title" : "小米 CC9 PLUS 手机 美颜自拍 游戏手机 蓝色(深蓝星球) 4G全网通 6GB+128GB",
+          "price" : 1999.0,
+          "createTime" : "2022-09-04 14:21:43",
+          "tmId" : 4,
+          "tmName" : "小米",
+          "tmLogoUrl" : "http://192.168.6.100:9000/gmall/2022-08-25/208d6e644f3942778e0aebed085cd3cexiaomi.png",
+          "category1Id" : 2,
+          "category1Name" : "手机",
+          "category2Id" : 13,
+          "category2Name" : "手机通讯",
+          "category3Id" : 61,
+          "category3Name" : "手机",
+          "hotScore" : 0,
+          "attrs" : [
+            {
+              "attrId" : 1,
+              "attrValue" : "1700-2799",
+              "attrName" : "价格"
+            },
+            {
+              "attrId" : 2,
+              "attrValue" : "6.0～6.24英寸",
+              "attrName" : "屏幕尺寸"
+            },
+            {
+              "attrId" : 3,
+              "attrValue" : "6GB",
+              "attrName" : "运行内存"
+            },
+            {
+              "attrId" : 4,
+              "attrValue" : "128GB",
+              "attrName" : "机身存储"
+            },
+            {
+              "attrId" : 5,
+              "attrValue" : "骁龙845",
+              "attrName" : "CPU型号"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "aggregations" : {
+    "attrsAgg" : {
+      "doc_count" : 55,
+      "attrIdAgg" : {
+        "doc_count_error_upper_bound" : 0,
+        "sum_other_doc_count" : 0,
+        "buckets" : [
+          {
+            "key" : 1,
+            "doc_count" : 11,
+            "attrNameAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "价格",
+                  "doc_count" : 11
+                }
+              ]
+            },
+            "attrValueAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "1700-2799",
+                  "doc_count" : 4
+                },
+                {
+                  "key" : "2800-4499",
+                  "doc_count" : 4
+                },
+                {
+                  "key" : "4500-11999",
+                  "doc_count" : 2
+                },
+                {
+                  "key" : "1000-1699",
+                  "doc_count" : 1
+                }
+              ]
+            }
+          },
+          {
+            "key" : 2,
+            "doc_count" : 11,
+            "attrNameAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "屏幕尺寸",
+                  "doc_count" : 11
+                }
+              ]
+            },
+            "attrValueAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : " 6.95英寸及以上",
+                  "doc_count" : 5
+                },
+                {
+                  "key" : "6.75-6.84英寸",
+                  "doc_count" : 2
+                },
+                {
+                  "key" : "6.0～6.24英寸",
+                  "doc_count" : 1
+                },
+                {
+                  "key" : "6.45-6.54英寸",
+                  "doc_count" : 1
+                },
+                {
+                  "key" : "6.55-6.64英寸",
+                  "doc_count" : 1
+                },
+                {
+                  "key" : "6.65-6.74英寸",
+                  "doc_count" : 1
+                }
+              ]
+            }
+          },
+          {
+            "key" : 3,
+            "doc_count" : 11,
+            "attrNameAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "运行内存",
+                  "doc_count" : 11
+                }
+              ]
+            },
+            "attrValueAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "6GB",
+                  "doc_count" : 5
+                },
+                {
+                  "key" : "8GB",
+                  "doc_count" : 4
+                },
+                {
+                  "key" : "12GB",
+                  "doc_count" : 2
+                }
+              ]
+            }
+          },
+          {
+            "key" : 4,
+            "doc_count" : 11,
+            "attrNameAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "机身存储",
+                  "doc_count" : 11
+                }
+              ]
+            },
+            "attrValueAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "128GB",
+                  "doc_count" : 5
+                },
+                {
+                  "key" : "256GB",
+                  "doc_count" : 3
+                },
+                {
+                  "key" : "512GB",
+                  "doc_count" : 2
+                },
+                {
+                  "key" : "64GB",
+                  "doc_count" : 1
+                }
+              ]
+            }
+          },
+          {
+            "key" : 5,
+            "doc_count" : 11,
+            "attrNameAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "CPU型号",
+                  "doc_count" : 11
+                }
+              ]
+            },
+            "attrValueAgg" : {
+              "doc_count_error_upper_bound" : 0,
+              "sum_other_doc_count" : 0,
+              "buckets" : [
+                {
+                  "key" : "麒麟990",
+                  "doc_count" : 4
+                },
+                {
+                  "key" : "骁龙855",
+                  "doc_count" : 3
+                },
+                {
+                  "key" : "其它",
+                  "doc_count" : 2
+                },
+                {
+                  "key" : "骁龙730",
+                  "doc_count" : 1
+                },
+                {
+                  "key" : "骁龙845",
+                  "doc_count" : 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

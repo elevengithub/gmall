@@ -130,7 +130,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         goods.setCategory3Id(categoryView.getCategory3Id());
         goods.setCategory3Name(categoryView.getCategory3Name());
 
-        //TODO 设置商品的热度分
         goods.setHotScore(0L);
 
         //设置商品的平台属性名和值信息

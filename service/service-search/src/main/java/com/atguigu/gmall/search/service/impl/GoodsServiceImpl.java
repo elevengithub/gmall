@@ -1,18 +1,20 @@
 package com.atguigu.gmall.search.service.impl;
 import com.atguigu.gmall.model.list.SearchAttr;
-import com.atguigu.gmall.model.vo.search.SearchConst;
-import com.google.common.collect.Lists;
-import com.atguigu.gmall.model.vo.search.OrderMapVo;
+import com.atguigu.gmall.model.vo.search.*;
 
 import com.atguigu.gmall.model.list.Goods;
-import com.atguigu.gmall.model.vo.search.SearchParamVo;
-import com.atguigu.gmall.model.vo.search.SearchResponseVo;
 import com.atguigu.gmall.search.repository.GoodsRepository;
 import com.atguigu.gmall.search.service.GoodsService;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -59,6 +62,21 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
+     * 更新商品热度分
+     * @param skuId
+     * @param hotScore
+     */
+    @Override
+    public void updateHotScore(Long skuId, Long hotScore) {
+        //1、根据id获取es中的商品
+        Goods goods = goodsRepository.findById(skuId).get();
+        //2、设置商品的热度分
+        goods.setHotScore(hotScore);
+        //3、重新保存商品
+        goodsRepository.save(goods);
+    }
+
+    /**
      * 封装响应数据SearchResponseVo
      * @param searchHits  根据DSL语句查询的结果
      * @param searchParam  搜索条件
@@ -84,10 +102,12 @@ public class GoodsServiceImpl implements GoodsService {
             }
             responseVo.setPropsParamList(list);
         }
-        //TODO 4、设置品牌集合，需要聚合分析
-        responseVo.setTrademarkList(Lists.newArrayList());
-        //TODO 5、设置属性集合，需要聚合分析
-        responseVo.setAttrsList(Lists.newArrayList());
+        //4、设置品牌集合，需要聚合分析
+        List<TrademarkVo> trademarkList = buildTrademarkList(searchHits);
+        responseVo.setTrademarkList(trademarkList);
+        //5、设置属性集合，需要聚合分析
+        List<AttrVo> attrsList = buildAttrsList(searchHits);
+        responseVo.setAttrsList(attrsList);
         //6、设置排序
         OrderMapVo orderMapVo = new OrderMapVo();
         orderMapVo.setSort(searchParam.getOrder().split(":")[0]);
@@ -111,6 +131,63 @@ public class GoodsServiceImpl implements GoodsService {
         responseVo.setUrlParam(buildUrlParam(searchParam));
 
         return responseVo;
+    }
+
+    /**
+     * 构建List<AttrVo>
+     * @param searchHits
+     * @return
+     */
+    private List<AttrVo> buildAttrsList(SearchHits<Goods> searchHits) {
+        //1、获取嵌入式聚合分析attrsAgg
+        ParsedNested attrsAgg = searchHits.getAggregations().get("attrsAgg");
+        //2、获取桶内的
+        ParsedLongTerms attrIdAgg = attrsAgg.getAggregations().get("attrIdAgg");
+        List<AttrVo> attrVos = attrIdAgg.getBuckets().stream().map(attr -> {
+            AttrVo attrVo = new AttrVo();
+            //获取attrIdAgg桶中的key设置attrVo的id
+            attrVo.setAttrId((Long) attr.getKey());
+            //获取attrNameAgg桶中的key设置为attrVo的attrName
+            ParsedStringTerms attrNameAgg = attr.getAggregations().get("attrNameAgg");
+            String attrName = attrNameAgg.getBuckets().get(0).getKeyAsString();
+            attrVo.setAttrName(attrName);
+            //获取attrValueAgg桶中的所有key组成的集合设置为attrVo的attrValueList
+            ParsedStringTerms attrValueAgg = attr.getAggregations().get("attrValueAgg");
+            List<String> attrValueList = attrValueAgg
+                    .getBuckets()
+                    .stream()
+                    .map(attrValue -> attrValue.getKeyAsString())
+                    .collect(Collectors.toList());
+            attrVo.setAttrValueList(attrValueList);
+            return attrVo;
+        }).collect(Collectors.toList());
+        return attrVos;
+    }
+
+    /**
+     * 构建TrademarkList
+     * @param searchHits  es搜索结果
+     * @return
+     */
+    private List<TrademarkVo> buildTrademarkList(SearchHits<Goods> searchHits) {
+        //1、获取聚合分析tmIdAgg的结果
+        ParsedLongTerms tmIdAgg = searchHits.getAggregations().get("tmIdAgg");
+        //2、获取所有TrademarkVo，存入List<TrademarkVo>
+        List<TrademarkVo> trademarkVos = tmIdAgg.getBuckets().stream().map(tm -> {
+            TrademarkVo trademarkVo = new TrademarkVo();
+            //根据buckets的key获取tmId
+            trademarkVo.setTmId((Long) tm.getKey());
+            //获取子聚合tmNameAgg的buckets的key，设置TrademarkVo的tmName属性
+            ParsedStringTerms tmNameAgg = tm.getAggregations().get("tmNameAgg");
+            String tmName = tmNameAgg.getBuckets().get(0).getKeyAsString();
+            trademarkVo.setTmName(tmName);
+            //获取子聚合tmLogoUrlAgg的buckets的key，设置TrademarkVo的tmName属性
+            ParsedStringTerms tmLogoUrlAgg = tm.getAggregations().get("tmLogoUrlAgg");
+            String tmLogoUrl = tmLogoUrlAgg.getBuckets().get(0).getKeyAsString();
+            trademarkVo.setTmLogoUrl(tmLogoUrl);
+            return trademarkVo;
+        }).collect(Collectors.toList());
+        return trademarkVos;
     }
 
     /**
@@ -152,6 +229,7 @@ public class GoodsServiceImpl implements GoodsService {
         //1、创建一个boolQuery
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
+        //2、构建三级分类查询语句
         if (searchParam.getCategory3Id() != null) {
             queryBuilder.must(QueryBuilders.termQuery("category3Id",searchParam.getCategory3Id()));
         }
@@ -164,12 +242,12 @@ public class GoodsServiceImpl implements GoodsService {
         if (!StringUtils.isEmpty(searchParam.getKeyword())) {
             queryBuilder.must(QueryBuilders.matchQuery("title",searchParam.getKeyword()));
         }
-        //trademark=1:小米
+        //3、构建品牌查询语句  trademark=1:小米
         if (!StringUtils.isEmpty(searchParam.getTrademark())) {
             String s = searchParam.getTrademark().split(":")[0];
             queryBuilder.must(QueryBuilders.termQuery("tmId",s));
         }
-        //props=24:256G:机身内存&props=23:8G:运行内存
+        //4、构建属性查询语句  props=24:256G:机身内存&props=23:8G:运行内存
         if (searchParam.getProps() != null && searchParam.getProps().length > 0) {
             for (String prop : searchParam.getProps()) {
                 String attrId = prop.split(":")[0];
@@ -184,10 +262,10 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
 
-        //创建一个原生的检索条件
+        //5、创建一个原生的检索条件
         NativeSearchQuery query = new NativeSearchQuery(queryBuilder);
 
-        //设置排序
+        //6、设置排序
         //综合排序：order=1:desc   价格排序：order=2:asc
         if (!StringUtils.isEmpty(searchParam.getOrder())) {
             String orderField = "hotScore";
@@ -205,11 +283,11 @@ public class GoodsServiceImpl implements GoodsService {
             query.addSort(sort);
         }
 
-        //设置分页
+        //7、设置分页
         PageRequest pageRequest = PageRequest.of(searchParam.getPageNo() - 1, SearchConst.SEARCH_PAGE_SIZE);
         query.setPageable(pageRequest);
 
-        //设置搜索关键字高亮显示
+        //8、设置搜索关键字高亮显示
         if (!StringUtils.isEmpty(searchParam.getKeyword())) {
             //创建高亮构建器
             HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -219,8 +297,30 @@ public class GoodsServiceImpl implements GoodsService {
             query.setHighlightQuery(highlightQuery);
         }
 
-        //TODO 聚合分析根据上述条件检索到的商品涉及到的所有品牌和所有平台属性
+        //9、根据上述条件检索到的商品聚合分析涉及到的所有品牌和所有平台属性
+        //品牌聚合分析
+        //1、构建聚合
+        TermsAggregationBuilder tmIdAgg = AggregationBuilders.terms("tmIdAgg").field("tmId").size(1000);
+        //2、构建子聚合tmNameAgg
+        TermsAggregationBuilder tmNameAgg = AggregationBuilders.terms("tmNameAgg").field("tmName").size(1);
+        tmIdAgg.subAggregation(tmNameAgg);
+        //3、构建子聚合
+        TermsAggregationBuilder tmLogoUrlAgg = AggregationBuilders.terms("tmLogoUrlAgg").field("tmLogoUrl").size(1);
+        tmIdAgg.subAggregation(tmLogoUrlAgg);
+        query.addAggregation(tmIdAgg);
 
+        //属性聚合分析
+        NestedAggregationBuilder nestedAgg = AggregationBuilders.nested("attrsAgg", "attrs");
+        //1、构建attrIdAgg聚合分析
+        TermsAggregationBuilder attrIdAgg = AggregationBuilders.terms("attrIdAgg").field("attrs.attrId").size(100);
+        nestedAgg.subAggregation(attrIdAgg);
+        //2、构建子聚合attrNameAgg
+        TermsAggregationBuilder attrNameAgg = AggregationBuilders.terms("attrNameAgg").field("attrs.attrName").size(1);
+        attrIdAgg.subAggregation(attrNameAgg);
+        //3、构建子聚合
+        TermsAggregationBuilder attrValueAgg = AggregationBuilders.terms("attrValueAgg").field("attrs.attrValue").size(100);
+        attrIdAgg.subAggregation(attrValueAgg);
+        query.addAggregation(nestedAgg);
 
         return query;
     }
