@@ -1,0 +1,6 @@
+server:
+  port: 7500
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

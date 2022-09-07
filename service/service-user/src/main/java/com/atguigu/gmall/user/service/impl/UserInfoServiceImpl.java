@@ -47,7 +47,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             String token = UUID.randomUUID().toString().replace("-", "");
             //存入redis缓存
             redisTemplate.opsForValue().set(SysRedisConst.USER_LOGIN + token,
-                    Jsons.toStr(userInfo),7, TimeUnit.DAYS);
+                    Jsons.toStr(user),7, TimeUnit.DAYS);
             LoginSuccessVo successVo = new LoginSuccessVo();
             successVo.setToken(token);
             successVo.setNickName(user.getNickName());
@@ -62,7 +62,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      */
     @Override
     public void logout(String token) {
-        redisTemplate.delete(token);
+        redisTemplate.delete(SysRedisConst.USER_LOGIN + token);
     }
 }
 

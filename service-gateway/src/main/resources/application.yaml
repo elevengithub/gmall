@@ -37,3 +37,16 @@ spring:
           predicates:
             - Host=**.gmall.com
 
+app:
+  auth:
+    no-auth-url:
+      - /css/**
+      - /js/**
+      - /img/**
+      - /login.html
+      - /api/user/passport/login
+    login-auth-url:
+      - /order/**
+    deny-url:
+      - /api/inner/**
+    login-page: http://passport.gmall.com/login.html
