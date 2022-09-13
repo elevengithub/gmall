@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @FeignClient("service-product")
-public interface SkuProductFeignClient {
+public interface SkuFeignClient {
 
 //    @GetMapping("/api/inner/rpc/product/getSkuDetailTo/{skuId}")
 //    Result<SkuDetailTo> getSkuDetailTo(@PathVariable("skuId") Long skuId);

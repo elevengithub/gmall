@@ -1,5 +1,8 @@
 package com.atguigu.gmall.model.cart;
 
+import com.atguigu.gmall.common.constant.SysRedisConst;
+import com.atguigu.gmall.common.execption.GmallException;
+import com.atguigu.gmall.common.result.ResultCodeEnum;
 import com.atguigu.gmall.model.activity.CouponInfo;
 import com.atguigu.gmall.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -8,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -46,11 +49,11 @@ public class CartInfo extends BaseEntity {
 
     //  ,fill = FieldFill.INSERT
     @TableField(value = "create_time")
-    private Timestamp createTime;
+    private Date createTime;
 
     //  ,fill = FieldFill.INSERT_UPDATE)
     @TableField(value = "update_time")
-    private Timestamp updateTime;
+    private Date updateTime;
 
     // 实时价格 skuInfo.price
     @TableField(exist = false)
@@ -61,4 +64,11 @@ public class CartInfo extends BaseEntity {
     @TableField(exist = false)
     private List<CouponInfo> couponInfoList;
 
+
+    public void setSkuNum(Integer skuNum) {
+        if(skuNum > SysRedisConst.CART_ITEM_NUM_LIMIT){
+            throw new GmallException(ResultCodeEnum.CART_ITEM_SKUNUM_OVERFLOW);
+        }
+        this.skuNum = skuNum;
+    }
 }

@@ -1,4 +1,4 @@
-package com.atguigu.gmall.common.config.constant;
+package com.atguigu.gmall.common.constant;
 
 public class SysRedisConst {
     public static final String CACHE_SKU_PREFIX = "sku:data:";
@@ -10,5 +10,9 @@ public class SysRedisConst {
     public static final String CACHE_CATEGORYS = "categorys";
     public static final String USER_LOGIN = "user:login:";
     public static final String SKU_HOTSCORE_PREFIX = "sku:hotscore:";
-    public static final String USERID_HEADER = "userId";
+    public static final String USERID_HEADER = "userid";
+    public static final String USERTEMPID_HEADER = "usertempid";
+    public static final String CART_KRY = "cart:user:";
+    public static final long CART_ITEMS_LIMIT = 200;
+    public static final Integer CART_ITEM_NUM_LIMIT = 200;
 }

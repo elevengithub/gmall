@@ -27,8 +27,35 @@ public class CartController {
                           @RequestParam("skuNum") Integer skuNum,
                           Model model){
         Result<SkuInfo> result = cartFeignClient.addCart(skuId,skuNum);
-        model.addAttribute("skuInfo",result.getData());
-        model.addAttribute("skuNum",skuNum);
-        return "cart/addCart";
+        if (result.isOk()) {
+            model.addAttribute("skuInfo",result.getData());
+            model.addAttribute("skuNum",skuNum);
+            return "cart/addCart";
+        } else {
+            model.addAttribute("msg",result.getData());
+            return "cart/error";
+        }
+    }
+
+    //http://cart.gmall.com/cart.html
+    /**
+     * 购物车展示页
+     * @return
+     */
+    @GetMapping("cart.html")
+    public String cartHtml(){
+        return "cart/index";
+    }
+
+    //http://cart.gmall.com/cart/deleteChecked
+
+    /**
+     * 删除选中的购物项
+     * @return
+     */
+    @GetMapping("/cart/deleteChecked")
+    public String deleteChecked(){
+        cartFeignClient.deleteChecked();
+        return "redirect:http://cart.gmall.com/cart.html";
     }
 }

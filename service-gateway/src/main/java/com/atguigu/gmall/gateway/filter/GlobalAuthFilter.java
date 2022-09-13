@@ -1,6 +1,6 @@
 package com.atguigu.gmall.gateway.filter;
 
-import com.atguigu.gmall.common.config.constant.SysRedisConst;
+import com.atguigu.gmall.common.constant.SysRedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.result.ResultCodeEnum;
 import com.atguigu.gmall.common.util.Jsons;
@@ -60,7 +60,7 @@ public class GlobalAuthFilter implements GlobalFilter {
                 UserInfo userInfo = getUserInfoByToken(token);
                 if (userInfo != null) {
                     //4.3、查询到用户，说明token正确，放行，并将userId设置到请求头中，透传userId
-                    ServerWebExchange newExchange = userIdTransport(userInfo,exchange);
+                    ServerWebExchange newExchange = userIdOrTempIdTransport(userInfo,exchange);
                     return chain.filter(newExchange);
                 }else{
                     //4.4、token错误，直接打回登录页进行登录操作
@@ -73,16 +73,12 @@ public class GlobalAuthFilter implements GlobalFilter {
         String token = getTokenFromRequest(exchange);
         //5.2、验证token
         UserInfo userInfo = getUserInfoByToken(token);
-        if (userInfo != null) {
-            //5.3、验证通过，userId透传，并放行
-            ServerWebExchange webExchange = userIdTransport(userInfo, exchange);
-            return chain.filter(webExchange);
-        }else{
-            //5.4、前端带了token，说明是假token，打回登录页
-            if (!StringUtils.isEmpty(token)) {
-                return redirectToCustomPage(globalUrlProperties.getLoginPage() + "?originUrl=" + uri,exchange);
-            }
+        if (!StringUtils.isEmpty(token) && userInfo == null) {
+            //5.3、假请求，直接打回
+            return redirectToCustomPage(globalUrlProperties.getLoginPage() + "?originUrl=" + uri,exchange);
         }
+        //5.4、透传userId或者userTempId
+        exchange = userIdOrTempIdTransport(userInfo, exchange);
         return chain.filter(exchange);
     }
 
@@ -134,20 +130,40 @@ public class GlobalAuthFilter implements GlobalFilter {
      * @param exchange  有请求和响应信息
      * @return
      */
-    private ServerWebExchange userIdTransport(UserInfo userInfo, ServerWebExchange exchange) {
+    private ServerWebExchange userIdOrTempIdTransport(UserInfo userInfo, ServerWebExchange exchange) {
         //请求一旦发来，所有的请求信息都是固定的，只能读取，不能修改
-        ServerHttpRequest request = exchange.getRequest();
-        //根据原来的请求，封装一个新的请求
-        ServerHttpRequest newRequest = exchange.getRequest()
-                .mutate() // 变异一个新的请求
-                .header(SysRedisConst.USERID_HEADER, userInfo.getId().toString()) //设置新请求的请求头
-                .build(); //构建新请求
+        //根据原来的请求，封装一个新的请求，变异一个新的请求
+        ServerHttpRequest.Builder mutate = exchange.getRequest().mutate();
+        //如果用户登录了，则透传用户id
+        if (userInfo != null) {
+            mutate.header(SysRedisConst.USERID_HEADER, userInfo.getId().toString());
+        }
+        //如果用户没登录，获取临时id，透传临时id
+        String userTempId = getUserTempId(exchange);
+        mutate.header(SysRedisConst.USERTEMPID_HEADER, userTempId);
         //根据新的请求构建新的exchange
-        ServerWebExchange newExchange = exchange.mutate()
-                .request(newRequest)
+        ServerWebExchange newExchange = exchange
+                .mutate()
+                .request(mutate.build())
                 .response(exchange.getResponse())
                 .build();
         return newExchange;
+    }
+
+    /**
+     * 获取用户临时id
+     * @param exchange
+     * @return
+     */
+    private String getUserTempId(ServerWebExchange exchange) {
+        //从cookie中获取userTempId
+        HttpCookie cookie = exchange.getRequest().getCookies().getFirst("userTempId");
+        //避免空指针，先判断cookie是否存在
+        if (cookie != null) {
+            return cookie.getValue();
+        }
+        //cookie中不存在userTempId，直接从请求头中获取并返回
+        return exchange.getRequest().getHeaders().getFirst("userTempId");
     }
 
     /**

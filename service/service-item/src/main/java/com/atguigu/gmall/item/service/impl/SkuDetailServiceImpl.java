@@ -1,7 +1,7 @@
 package com.atguigu.gmall.item.service.impl;
 
 import com.atguigu.gmall.common.result.Result;
-import com.atguigu.gmall.feign.product.SkuProductFeignClient;
+import com.atguigu.gmall.feign.product.SkuFeignClient;
 import com.atguigu.gmall.feign.search.SearchFeignClient;
 import com.atguigu.gmall.item.cache.CacheOpsService;
 import com.atguigu.gmall.item.service.SkuDetailService;
@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
-    SkuProductFeignClient skuDetailFeignClient;
+    SkuFeignClient skuDetailFeignClient;
     @Autowired
     ThreadPoolExecutor executor;
     @Autowired

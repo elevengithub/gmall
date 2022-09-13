@@ -29,7 +29,9 @@ public enum ResultCodeEnum {
     SECKILL_ORDER_SUCCESS(218, "下单成功"),
     COUPON_GET(220, "优惠券已经领取"),
     COUPON_LIMIT_GET(221, "优惠券已发放完毕"),
-    ;
+
+    ADD_SKUTOCAT_OVERFLOW(300,"添加商品种类数量超过最大值，请移除部分商品后继续添加。"),
+    CART_ITEM_SKUNUM_OVERFLOW(301, "添加单个商品的数量超过最大值。");
 
     private Integer code;
 
