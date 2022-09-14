@@ -2,6 +2,7 @@ package com.atguigu.gmall.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.amqp.core.Message;
 import org.springframework.util.StringUtils;
 
 public class Jsons {
@@ -35,5 +36,9 @@ public class Jsons {
             e.printStackTrace();
         }
         return t;
+    }
+
+    public static<T> T toObj(Message message, Class<T> clz) {
+        return toObj(message.getBody() + "",clz);
     }
 }

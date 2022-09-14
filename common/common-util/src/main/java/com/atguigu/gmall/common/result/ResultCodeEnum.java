@@ -1,5 +1,6 @@
 package com.atguigu.gmall.common.result;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import lombok.Getter;
 
 /**
@@ -31,7 +32,12 @@ public enum ResultCodeEnum {
     COUPON_LIMIT_GET(221, "优惠券已发放完毕"),
 
     ADD_SKUTOCAT_OVERFLOW(300,"添加商品种类数量超过最大值，请移除部分商品后继续添加。"),
-    CART_ITEM_SKUNUM_OVERFLOW(301, "添加单个商品的数量超过最大值。");
+    CART_ITEM_SKUNUM_OVERFLOW(301, "添加单个商品的数量超过最大值。"),
+
+    TOKEN_INVAILD(400, "页面已过期，请重新刷新"),
+    ORDER_NO_STOCK(401, "订单商品库存不足："),
+    ORDER_PRICE_CHANGED(402,"订单中以下商品价格变化，请重新刷新再试；");
+
 
     private Integer code;
 

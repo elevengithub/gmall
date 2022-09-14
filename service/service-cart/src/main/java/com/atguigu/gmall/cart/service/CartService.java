@@ -58,4 +58,11 @@ public interface CartService {
      * @return
      */
     void deleteChecked(String cartKey);
+
+    /**
+     * 拿到购物车中所有选中的商品
+     * @param cartKey
+     * @return
+     */
+    List<CartInfo> getCheckedItems(String cartKey);
 }

@@ -2,6 +2,9 @@ package com.atguigu.gmall.order.mapper;
 
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 14613
@@ -11,6 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
 
+    void changeOrderStatus(@Param("orderId") Long orderId,
+                           @Param("userId") Long userId,
+                           @Param("orderStatus") String orderStatus,
+                           @Param("processStatus") String processStatus,
+                           @Param("expects") List<String> expects);
 }
 
 

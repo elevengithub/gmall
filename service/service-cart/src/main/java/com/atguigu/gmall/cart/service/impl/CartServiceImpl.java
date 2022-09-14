@@ -57,7 +57,7 @@ public class CartServiceImpl implements CartService {
             executor.submit(() -> {
                 //绑定请求信息到异步执行的线程上
                 RequestContextHolder.setRequestAttributes(attributes);
-                updateCartAllItemsPrice(cartKey,cartInfos);
+                updateCartAllItemsPrice(cartKey);
                 //异步执行完任务，移除数据
                 RequestContextHolder.resetRequestAttributes();
             });
@@ -69,16 +69,22 @@ public class CartServiceImpl implements CartService {
     /**
      * 更新购物车中所有商品的价格为实时价格
      * @param cartKey
-     * @param cartInfos
      */
-    private void updateCartAllItemsPrice(String cartKey, List<CartInfo> cartInfos) {
+    private void updateCartAllItemsPrice(String cartKey) {
         BoundHashOperations<String, String, String> hashOps = redisTemplate.boundHashOps(cartKey);
-        for (CartInfo cartInfo : cartInfos) {
-            Result<BigDecimal> result = skuFeignClient.getSkuPrice(cartInfo.getSkuId());
-            cartInfo.setSkuPrice(result.getData());
-            cartInfo.setUpdateTime(new Date());
-            hashOps.put(cartInfo.getSkuId().toString(),Jsons.toStr(cartInfo));
-        }
+        hashOps.values()
+                .stream()
+                .map(str -> Jsons.toObj(str,CartInfo.class))
+                .forEach(cartInfo -> {
+                    Result<BigDecimal> result = skuFeignClient.getSkuPrice(cartInfo.getSkuId());
+                    cartInfo.setSkuPrice(result.getData());
+                    cartInfo.setUpdateTime(new Date());
+                    //更新购物车价格  5ms。给购物车存数据之前再做一个校验。
+                    //100%防得住
+                    if(hashOps.hasKey(cartInfo.getSkuId().toString())){
+                        hashOps.put(cartInfo.getSkuId().toString(), Jsons.toStr(cartInfo));
+                    }
+                });
     }
 
     /**
@@ -268,8 +274,6 @@ public class CartServiceImpl implements CartService {
         if(ids!=null && ids.size() > 0){
             hashOps.delete(ids.toArray());
         }
-
-
     }
 
     /**
@@ -277,6 +281,7 @@ public class CartServiceImpl implements CartService {
      * @param cartKey
      * @return
      */
+    @Override
     public List<CartInfo> getCheckedItems(String cartKey) {
         List<CartInfo> cartList = getCartList(cartKey);
         List<CartInfo> checkedItems = cartList.stream()
