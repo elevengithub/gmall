@@ -15,7 +15,7 @@ public class RabbitTest {
     @Test
     public void test01(){
         rabbitTemplate.convertAndSend(MqConstant.EXCHANGE_ORDER_EVENT,
-                MqConstant.QUEUE_ORDER_DELAY,
+                MqConstant.RK_ORDER_CREATED,
                 "666");
     }
 }

@@ -39,15 +39,15 @@ public class OrderEventConfiguration {
     @Bean
     public Queue orderDelayQueue(){
         Map<String, Object> arguments = new HashMap<>();
-        //设置队列中消息的过期时间 SysRedisConst.ORDER_CLOSE_TTL * 1000
-        arguments.put("x-message-ttl", 10000);
+        //设置队列中消息的过期时间
+        arguments.put("x-message-ttl", SysRedisConst.ORDER_CLOSE_TTL * 1000);
         //设置消息过期后发送到哪个交换机
         arguments.put("x-dead-letter-exchange",MqConstant.EXCHANGE_ORDER_EVENT);
         //设置发送到交换机的路由键
         arguments.put("x-dead-letter-routing-key",MqConstant.RK_ORDER_DEAD);
-        Queue queue = new Queue(MqConstant.QUEUE_ORDER_DELAY,
+
+        return new Queue(MqConstant.QUEUE_ORDER_DELAY,
                 true, false,false,arguments);
-        return queue;
     }
 
     /**

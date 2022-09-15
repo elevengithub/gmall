@@ -38,6 +38,7 @@ public class AppRabbitConfiguration {
                                           String exchange,
                                           String routingKey) -> {
             log.error("消息投递到队列失败，保存到数据库，消息：{}",message);
+            log.error("错误信息：{},{}",replyCode,replyText);
         });
         return rabbitTemplate;
     }

@@ -39,6 +39,7 @@ public class Jsons {
     }
 
     public static<T> T toObj(Message message, Class<T> clz) {
-        return toObj(message.getBody() + "",clz);
+        String json = new String(message.getBody());
+        return toObj(json,clz);
     }
 }

@@ -78,7 +78,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         //5、发消息到延迟队列
         OrderMsg orderMsg = new OrderMsg(orderInfo.getUserId(),orderInfo.getId());
         rabbitTemplate.convertAndSend(MqConstant.EXCHANGE_ORDER_EVENT,
-                MqConstant.QUEUE_ORDER_DELAY, Jsons.toStr(orderMsg));
+                MqConstant.RK_ORDER_CREATED, Jsons.toStr(orderMsg));
         return orderInfo.getId();
     }
 
