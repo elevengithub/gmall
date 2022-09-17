@@ -1,5 +1,6 @@
 package com.atguigu.gmall.order.biz;
 
+import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.vo.trade.OrderConfirmDataVo;
 import com.atguigu.gmall.model.vo.trade.OrderSubmitVo;
 
@@ -25,4 +26,11 @@ public interface OrderBizService {
      * @param userId  用户id
      */
     void closeOrder(Long orderId, Long userId);
+
+    /**
+     * 根据订单id获取订单信息
+     * @param orderId 订单id
+     * @return 订单详情
+     */
+    OrderInfo getOrderInfoById(Long orderId);
 }

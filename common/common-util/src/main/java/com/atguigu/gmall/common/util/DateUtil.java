@@ -13,6 +13,11 @@ public class DateUtil {
 
     private static final String dateFormat = "yyyy-MM-dd";
 
+    public static String formatDate(Date date,String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
+    }
+
     /**
      * 获取两个时间差 单位：秒
      * @param date1

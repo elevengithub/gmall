@@ -11,20 +11,17 @@ import com.atguigu.gmall.feign.user.UserFeignClient;
 import com.atguigu.gmall.feign.ware.WareFeignClient;
 import com.atguigu.gmall.model.cart.CartInfo;
 import com.atguigu.gmall.model.enums.ProcessStatus;
+import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.user.UserAddress;
 import com.atguigu.gmall.model.vo.trade.CartInfoVo;
 import com.atguigu.gmall.model.vo.trade.OrderConfirmDataVo;
 import com.atguigu.gmall.model.vo.trade.OrderSubmitVo;
 import com.atguigu.gmall.order.biz.OrderBizService;
-import com.atguigu.gmall.order.mapper.OrderInfoMapper;
 import com.atguigu.gmall.order.service.OrderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -153,6 +150,16 @@ public class OrderBizServiceImpl implements OrderBizService {
         List<ProcessStatus> expected = Arrays.asList(ProcessStatus.UNPAID,ProcessStatus.FINISHED);
         //2、调用mapper层完成关闭订单操作
         orderInfoService.changeOrderStatus(orderId,userId,ProcessStatus.CLOSED,expected);
+    }
+
+    /**
+     * 根据订单id获取订单信息
+     * @param orderId 订单id
+     * @return 订单详情
+     */
+    @Override
+    public OrderInfo getOrderInfoById(Long orderId) {
+        return orderInfoService.getById(orderId);
     }
 
     /**

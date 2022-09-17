@@ -1,9 +1,11 @@
 package com.atguigu.gmall.feign.order;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.vo.trade.OrderConfirmDataVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/api/inner/rpc/order")
@@ -16,4 +18,12 @@ public interface OrderFeignClient {
      */
     @GetMapping("/confirm/data")
     Result<OrderConfirmDataVo> getOrderConfirmData();
+
+    /**
+     * 获取订单详情信息
+     * @param orderId  订单id
+     * @return
+     */
+    @GetMapping("/getOrderInfoById/{orderId}")
+    Result<OrderInfo> getOrderInfoById(@PathVariable("orderId") Long orderId);
 }
