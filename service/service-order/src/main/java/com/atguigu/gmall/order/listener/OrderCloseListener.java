@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.util.Jsons;
 import com.atguigu.gmall.constant.MqConstant;
 import com.atguigu.gmall.model.to.order.OrderMsg;
 import com.atguigu.gmall.order.biz.OrderBizService;
+import com.atguigu.gmall.rabbit.RabbitService;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -21,8 +22,14 @@ public class OrderCloseListener {
     @Autowired
     OrderBizService orderBizService;
     @Autowired
-    StringRedisTemplate redisTemplate;
+    RabbitService rabbitService;
 
+    /**
+     * 监听关闭订单队列，消费消息，进行关单操作
+     * @param message
+     * @param channel
+     * @throws IOException
+     */
     @RabbitListener(queues = MqConstant.QUEUE_ORDER_DEAD)
     public void orderClose(Message message, Channel channel) throws IOException {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
@@ -36,17 +43,8 @@ public class OrderCloseListener {
         } catch (Exception e) {
             log.error("订单关闭业务失败。消息：{}，失败原因：{}",orderMsg,e);
             //重试3次再次关闭订单
-            Long increment = redisTemplate.opsForValue()
-                    .increment(SysRedisConst.MQ_RETRY + "order:" + orderMsg.getOrderId());
-            if (increment <= 3) {
-                //尝试次数未达到3次，重新放回延迟队列
-                channel.basicNack(deliveryTag,false,true);
-            } else {
-                //尝试超过3次，不重新入队
-                channel.basicNack(deliveryTag,false,false);
-                //删除redis中记录重试次数的自增key
-                redisTemplate.delete(SysRedisConst.MQ_RETRY + "order:" + orderMsg.getOrderId());
-            }
+            String uk = SysRedisConst.MQ_RETRY + "order:" + orderMsg.getOrderId();
+            rabbitService.retryConsumeMsg(3L,uk,deliveryTag,channel);
         }
     }
 }

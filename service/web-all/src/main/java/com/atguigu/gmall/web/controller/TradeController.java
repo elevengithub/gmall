@@ -26,4 +26,10 @@ public class TradeController {
         model.addAttribute("tradeNo",data.getTradeNo());
         return "order/trade";
     }
+
+    //http://order.gmall.com/myOrder.html
+    @GetMapping("myOrder.html")
+    public String myOrderPage(){
+        return "order/myOrder";
+    }
 }

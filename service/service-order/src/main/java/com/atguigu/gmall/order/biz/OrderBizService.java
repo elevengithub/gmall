@@ -3,6 +3,10 @@ package com.atguigu.gmall.order.biz;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.vo.trade.OrderConfirmDataVo;
 import com.atguigu.gmall.model.vo.trade.OrderSubmitVo;
+import com.atguigu.gmall.model.vo.trade.OrderWareMapVo;
+import com.atguigu.gmall.model.vo.trade.WareChildOrderVo;
+
+import java.util.List;
 
 public interface OrderBizService {
 
@@ -32,5 +36,12 @@ public interface OrderBizService {
      * @param orderId 订单id
      * @return 订单详情
      */
-    OrderInfo getOrderInfoById(Long orderId);
+    OrderInfo getOrderInfoById(Long orderId,Long userId);
+
+    /**
+     * 拆单
+     * @param params
+     * @return
+     */
+    List<WareChildOrderVo> orderSplit(OrderWareMapVo params);
 }

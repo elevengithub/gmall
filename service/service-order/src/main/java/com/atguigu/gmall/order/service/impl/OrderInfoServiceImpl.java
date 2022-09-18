@@ -10,7 +10,6 @@ import com.atguigu.gmall.model.order.OrderDetail;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.to.order.OrderMsg;
 import com.atguigu.gmall.model.vo.trade.OrderSubmitVo;
-import com.atguigu.gmall.order.mapper.OrderDetailMapper;
 import com.atguigu.gmall.order.service.OrderDetailService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.order.service.OrderInfoService;

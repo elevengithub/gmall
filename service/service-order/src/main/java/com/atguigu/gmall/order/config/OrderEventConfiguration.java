@@ -67,17 +67,45 @@ public class OrderEventConfiguration {
                 null);
     }
 
+    /**
+     * 死单队列
+     * @return
+     */
     @Bean
     public Queue orderDeadQueue(){
         return new Queue(MqConstant.QUEUE_ORDER_DEAD,true,false,false);
     }
 
+    /**
+     * 死单队列与交换机的绑定关系
+     * @return
+     */
     @Bean
     public Binding orderDeadQueueBinding(){
         return new Binding(MqConstant.QUEUE_ORDER_DEAD,
                 Binding.DestinationType.QUEUE,
                 MqConstant.EXCHANGE_ORDER_EVENT,
                 MqConstant.RK_ORDER_DEAD,
+                null);
+    }
+
+    /**
+     * 支付成功单队列
+     */
+    @Bean
+    public Queue orderPayedQueue(){
+        return new Queue(MqConstant.QUEUE_ORDER_PAYED,true,false,false);
+    }
+
+    /**
+     * 支付成功队列与交换机绑定关系
+     */
+    @Bean
+    public Binding orderPayedQueueBinding(){
+        return new Binding(MqConstant.QUEUE_ORDER_PAYED,
+                Binding.DestinationType.QUEUE,
+                MqConstant.EXCHANGE_ORDER_EVENT,
+                MqConstant.RK_ORDER_PAYED,
                 null);
     }
 }

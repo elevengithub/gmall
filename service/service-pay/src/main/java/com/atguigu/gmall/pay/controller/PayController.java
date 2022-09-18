@@ -2,8 +2,10 @@ package com.atguigu.gmall.pay.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.atguigu.gmall.common.util.Jsons;
+import com.atguigu.gmall.constant.MqConstant;
 import com.atguigu.gmall.pay.service.AlipayService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class PayController {
 
     @Autowired
     AlipayService alipayService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     /**
      * 买家账号 tawmvu1129@sandbox.com
@@ -57,8 +62,10 @@ public class PayController {
         boolean result = alipayService.rsaCheckV1(params);
         if (result) {
             log.info("支付成功，异步通知抵达，验签通过。{}", Jsons.toStr(params));
-            //TODO 修改订单状态
-
+            //发送消息到订单交换机，
+            rabbitTemplate.convertAndSend(MqConstant.EXCHANGE_ORDER_EVENT,
+                    MqConstant.RK_ORDER_PAYED,
+                    Jsons.toStr(params));
             return "success";
         } else {
             return "fail";

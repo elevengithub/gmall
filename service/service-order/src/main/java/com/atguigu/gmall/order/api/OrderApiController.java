@@ -1,5 +1,6 @@
 package com.atguigu.gmall.order.api;
 
+import com.atguigu.gmall.common.auth.AuthUtils;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.vo.trade.OrderConfirmDataVo;
@@ -27,14 +28,16 @@ public class OrderApiController {
         return Result.ok(orderConfirmDataVo);
     }
 
+
     /**
-     * 获取订单详情信息
-     * @param orderId  订单id
+     * 获取某个订单数据
+     * @param orderId
      * @return
      */
     @GetMapping("/getOrderInfoById/{orderId}")
-    public Result<OrderInfo> getOrderInfoById(@PathVariable("orderId") Long orderId){
-        OrderInfo orderInfo = orderBizService.getOrderInfoById(orderId);
-        return Result.ok(orderInfo);
+    public Result<OrderInfo> getOrderInfo(@PathVariable("orderId") Long orderId){
+        Long userId = AuthUtils.getCurrentAuthInfo().getUserId();
+        OrderInfo info = orderBizService.getOrderInfoById(orderId, userId);
+        return Result.ok(info);
     }
 }
